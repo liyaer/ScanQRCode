@@ -202,8 +202,14 @@
 {
     [super viewWillDisappear:animated];
     
-    [_timer setFireDate:[NSDate distantFuture]];
-    _timer = nil;
+    if (_timer)
+    {
+        if ([_timer isValid])
+        {
+            [_timer invalidate];
+        }
+        _timer = nil;
+    }
 }
 
 
