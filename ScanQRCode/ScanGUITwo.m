@@ -119,13 +119,13 @@
 //生成扫描区域全透明，周围半透明效果
 -(void)drawGUI
 {
-    //1，绘制一张不透明，周围半透明的图片
+    //1，绘制一张中间不透明，周围半透明的图片
     //创建一张画布
     UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, NO, [UIScreen mainScreen].scale);
-    //拿到画笔
-    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();//拿到画笔
     //现将整个图片涂成半透明
-    CGContextSetRGBFillColor(context, 0, 0, 0, .7f);
+    CGContextSetRGBFillColor(context, 0, 0, 0, .3f);
     CGContextAddRect(context, self.view.bounds);
     CGContextFillPath(context);
     
@@ -138,12 +138,19 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
+    //打开这里的注释查看生成的图片（UIImageView和UIWindow一样只是个容器，图片本身透明的话，显示出来也是透明的，不用担心UIImageView是否对透明图产生影响，将UIImageView理解为透明容器即可）
+//    UIImageView *img = [[UIImageView alloc] initWithFrame:self.view.bounds];
+//    img.image = image;
+//    [self.view addSubview:img];
     
     //2，创建一个用于遮罩的mask层，mask层自身不显示，但是影响到把mask层作为属性的layer的显示，mask的每一点的透明度反作用到layer
+    //将图片放到一个图层上显示
     CALayer *mask = [[CALayer alloc] init];
     mask.bounds = self.view.bounds;
     mask.position = self.view.center;
     mask.contents = (__bridge id)image.CGImage;
+    
+    //将显示图片的图层作为一个mask
     self.preview.mask = mask;
     self.preview.masksToBounds = YES;
 }

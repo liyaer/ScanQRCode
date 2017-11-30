@@ -110,19 +110,21 @@
 //绘制四周半透明，扫描区域全透明
 - (void)setCropRect:(CGRect)cropRect
 {
-    cropLayer = [[CAShapeLayer alloc] init];
+    //设置Path
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, nil, cropRect);
     CGPathAddRect(path, nil, self.view.bounds);
     
-    [cropLayer setFillRule:kCAFillRuleEvenOdd];
+    //交给CAShapeLayer绘制Path
+    cropLayer = [[CAShapeLayer alloc] init];
     [cropLayer setPath:path];
+    [cropLayer setFillRule:kCAFillRuleEvenOdd];//奇偶填充，奇填偶不填（对于此处来说，二者交叉区域是cropRect，视为偶；非交叉区域视为奇）
     [cropLayer setFillColor:[UIColor blackColor].CGColor];
-    [cropLayer setOpacity:0.3];
-    
-    [cropLayer setNeedsDisplay];
-    
-    [self.view.layer addSublayer:cropLayer];
+    [cropLayer setOpacity:0.5];
+
+    //在某个图层上显示绘制内容
+    [self.preview addSublayer:cropLayer];
+//    [self.view.layer addSublayer:cropLayer];这两个两个图层都可以实现效果
 }
 
 
