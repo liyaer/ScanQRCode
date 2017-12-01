@@ -125,6 +125,8 @@
     //在某个图层上显示绘制内容
     [self.preview addSublayer:cropLayer];
 //    [self.view.layer addSublayer:cropLayer];这两个两个图层都可以实现效果
+    
+    CGPathRelease(path);//使用完毕再释放
 }
 
 
